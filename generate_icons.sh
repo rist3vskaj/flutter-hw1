@@ -68,3 +68,4 @@ sips -z 192 192 "$SOURCE_ICON" --out "$ANDROID_DIR/mipmap-xxxhdpi/ic_launcher.pn
 echo "Icons generated successfully!"
 echo "Now rebuild your app: flutter clean && flutter run"
 
+

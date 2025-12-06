@@ -53,8 +53,9 @@ class CatImage {
 
   factory CatImage.fromJson(Map<String, dynamic> json) {
     final breedsJson = json['breeds'] as List<dynamic>? ?? <dynamic>[];
-    final CatBreed? breed =
-        breedsJson.isNotEmpty ? CatBreed.fromJson(breedsJson.first as Map<String, dynamic>) : null;
+    final CatBreed? breed = breedsJson.isNotEmpty
+        ? CatBreed.fromJson(breedsJson.first as Map<String, dynamic>)
+        : null;
     return CatImage(
       id: json['id'] as String? ?? '',
       url: json['url'] as String? ?? '',
@@ -64,5 +65,3 @@ class CatImage {
     );
   }
 }
-
-

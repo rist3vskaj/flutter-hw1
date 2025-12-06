@@ -77,12 +77,14 @@ class CatApiClient {
     if (breeds.isEmpty) {
       throw Exception('Не удалось загрузить список пород');
     }
-    
+
     // Pick a random breed
-    final CatBreed randomBreed = breeds[(DateTime.now().millisecondsSinceEpoch % breeds.length)];
-    
+    final CatBreed randomBreed =
+        breeds[(DateTime.now().millisecondsSinceEpoch % breeds.length)];
+
     // Now fetch an image for this specific breed
-    final uri = Uri.parse('$_baseUrl/images/search?breed_ids=${randomBreed.id}&limit=1');
+    final uri = Uri.parse(
+        '$_baseUrl/images/search?breed_ids=${randomBreed.id}&limit=1');
     final response = await _client.get(uri);
 
     if (response.statusCode != 200) {
@@ -95,7 +97,8 @@ class CatApiClient {
       return _fetchRandomCatWithBreed();
     }
 
-    final Map<String, dynamic> imageData = decoded.first as Map<String, dynamic>;
+    final Map<String, dynamic> imageData =
+        decoded.first as Map<String, dynamic>;
     // Manually add breed data to the image response
     imageData['breeds'] = <Map<String, dynamic>>[
       <String, dynamic>{
@@ -113,10 +116,11 @@ class CatApiClient {
 
     return CatImage.fromJson(imageData);
   }
-  
+
   Future<CatImage> _fetchRandomCatWithBreed() async {
     // Fallback: try to get a random image with breed data
-    final uri = Uri.parse('$_baseUrl/images/search?has_breeds=1&size=med&limit=1');
+    final uri =
+        Uri.parse('$_baseUrl/images/search?has_breeds=1&size=med&limit=1');
     final response = await _client.get(uri);
 
     if (response.statusCode != 200) {
@@ -347,8 +351,9 @@ class _CatSwipeScreenState extends State<CatSwipeScreen> {
                     fit: BoxFit.cover,
                     placeholder: (BuildContext context, String url) =>
                         const Center(child: CircularProgressIndicator()),
-                    errorWidget: (BuildContext context, String url, Object error) =>
-                        const Icon(Icons.broken_image, size: 64),
+                    errorWidget:
+                        (BuildContext context, String url, Object error) =>
+                            const Icon(Icons.broken_image, size: 64),
                   ),
                   // Gradient overlay for better text visibility
                   Positioned(
@@ -361,8 +366,8 @@ class _CatSwipeScreenState extends State<CatSwipeScreen> {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: <Color>[
-                            Colors.black.withOpacity(0.7),
-                            Colors.black.withOpacity(0.3),
+                            Colors.black.withValues(alpha: 0.7),
+                            Colors.black.withValues(alpha: 0.3),
                             Colors.transparent,
                           ],
                         ),
@@ -393,7 +398,7 @@ class _CatSwipeScreenState extends State<CatSwipeScreen> {
                               cat.breed!.origin,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.9),
                                 shadows: const <Shadow>[
                                   Shadow(
                                     offset: Offset(1, 1),
@@ -444,10 +449,11 @@ class CatDetailScreen extends StatelessWidget {
                   fit: BoxFit.cover,
                   placeholder: (BuildContext context, String url) =>
                       const Center(child: CircularProgressIndicator()),
-                  errorWidget: (BuildContext context, String url, Object error) =>
-                      const Icon(Icons.broken_image, size: 64),
+                  errorWidget:
+                      (BuildContext context, String url, Object error) =>
+                          const Icon(Icons.broken_image, size: 64),
                 ),
-            ),
+              ),
             ),
             const SizedBox(height: 24),
             if (breed != null) ...<Widget>[
@@ -470,9 +476,10 @@ class CatDetailScreen extends StatelessWidget {
               const SizedBox(height: 16),
               // Origin
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -523,20 +530,34 @@ class CatDetailScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .surfaceContainerHighest
+                      .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   children: <Widget>[
-                    _buildCharacteristicRow('Характер', breed.temperament.isNotEmpty ? breed.temperament : 'Не указано'),
+                    _buildCharacteristicRow(
+                        'Характер',
+                        breed.temperament.isNotEmpty
+                            ? breed.temperament
+                            : 'Не указано'),
                     const Divider(height: 24),
-                    _buildCharacteristicRow('Продолжительность жизни', breed.lifeSpan.isNotEmpty ? '${breed.lifeSpan} лет' : 'Не указано'),
+                    _buildCharacteristicRow(
+                        'Продолжительность жизни',
+                        breed.lifeSpan.isNotEmpty
+                            ? '${breed.lifeSpan} лет'
+                            : 'Не указано'),
                     const Divider(height: 24),
-                    _buildCharacteristicRow('Интеллект', '${breed.intelligence}/5'),
+                    _buildCharacteristicRow(
+                        'Интеллект', '${breed.intelligence}/5'),
                     const Divider(height: 24),
-                    _buildCharacteristicRow('Энергичность', '${breed.energyLevel}/5'),
+                    _buildCharacteristicRow(
+                        'Энергичность', '${breed.energyLevel}/5'),
                     const Divider(height: 24),
-                    _buildCharacteristicRow('Ласковость', '${breed.affectionLevel}/5'),
+                    _buildCharacteristicRow(
+                        'Ласковость', '${breed.affectionLevel}/5'),
                   ],
                 ),
               ),
@@ -569,7 +590,10 @@ class CatDetailScreen extends StatelessWidget {
                       'Этот котик не имеет данных о породе в базе',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Theme.of(context).colorScheme.onErrorContainer.withOpacity(0.7),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onErrorContainer
+                            .withValues(alpha: 0.7),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -669,11 +693,13 @@ class _BreedListScreenState extends State<BreedListScreen> {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: _breeds.length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(height: 0),
+        separatorBuilder: (BuildContext context, int index) =>
+            const Divider(height: 0),
         itemBuilder: (BuildContext context, int index) {
           final CatBreed breed = _breeds[index];
-          final String shortDescription =
-              breed.description.length > 90 ? '${breed.description.substring(0, 90)}…' : breed.description;
+          final String shortDescription = breed.description.length > 90
+              ? '${breed.description.substring(0, 90)}…'
+              : breed.description;
 
           return ListTile(
             title: Text(breed.name),
@@ -685,7 +711,8 @@ class _BreedListScreenState extends State<BreedListScreen> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute<Widget>(
-                  builder: (BuildContext context) => BreedDetailScreen(breed: breed),
+                  builder: (BuildContext context) =>
+                      BreedDetailScreen(breed: breed),
                 ),
               );
             },
@@ -740,7 +767,8 @@ class BreedDetailScreen extends StatelessWidget {
             const SizedBox(height: 8),
             _buildCharacteristicRow('Характер', breed.temperament),
             const SizedBox(height: 8),
-            _buildCharacteristicRow('Продолжительность жизни', '${breed.lifeSpan} лет'),
+            _buildCharacteristicRow(
+                'Продолжительность жизни', '${breed.lifeSpan} лет'),
             const SizedBox(height: 8),
             _buildCharacteristicRow('Интеллект', '${breed.intelligence}/5'),
             const SizedBox(height: 8),
@@ -775,5 +803,3 @@ class BreedDetailScreen extends StatelessWidget {
     );
   }
 }
-
-
